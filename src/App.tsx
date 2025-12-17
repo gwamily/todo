@@ -12,7 +12,7 @@ function App() {
 
   return (
     <div className='relative flex flex-col gap-5 my-20 w-full h-full font-gwam tracking-normal'>
-      <video src="/gradient.webm" autoPlay loop muted className='min-w-screen min-h-screen w-auto h-auto -z-50 fixed top-0 left-0 object-fill'></video>
+      <video src="/subtodo/gradient.webm" autoPlay loop muted className='min-w-screen min-h-screen w-auto h-auto -z-50 fixed top-0 left-0 object-fill'></video>
       <div className='mx-2 md:mx-0'>
         <Card className='bg-white max-w-200 mx-auto gap-2'>
           <CardHeader>

@@ -6,7 +6,7 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
   return {
-    base: mode === "development" ? undefined : '/subtodo/',
+    base: '/subtodo/',
     plugins: [
       react({
         babel: {
@@ -19,7 +19,7 @@ export default defineConfig(({ mode }) => {
       alias: {
         "@": path.resolve(__dirname, "./src"),
       },
-    },
+    }
   }
 }
 )
