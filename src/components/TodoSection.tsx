@@ -1,9 +1,11 @@
 import type { TodoSection } from "@/types/section"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./ui/collapsible";
 import { Checkbox } from "./ui/checkbox";
-import { Plus, TextAlignJustify } from "lucide-react";
+import { Plus, TextAlignJustify, Trash } from "lucide-react";
 import { Button } from "./ui/button";
 import { getSectionTodoStatus, useTodoActions } from "@/hooks/useTodoContext";
+import { cn } from "@/lib/utils";
+import { ButtonGroup } from "./ui/button-group";
 
 interface Props {
   section: TodoSection
@@ -21,8 +23,8 @@ export const SectionTodo: React.FC<Props> = ({ section, sectionIndex }) => {
         {section.todos.length <= 0 ? (
           <Checkbox
             className='data-[state=checked]:border-purple-600 data-[state=checked]:bg-purple-600 border-purple-500 data-[state=checked]:text-white dark:data-[state=checked]:border-blue-700 dark:data-[state=checked]:bg-blue-700"'
-            checked={section.isDone} onCheckedChange={(e) => {
-              actions.toggleSectionDone(sectionIndex, e as boolean);
+            checked={section.isDone} onCheckedChange={(_e) => {
+              actions.toggleSectionDone(sectionIndex);
             }}
           />
         ) : (
@@ -43,16 +45,30 @@ export const SectionTodo: React.FC<Props> = ({ section, sectionIndex }) => {
         </CollapsibleTrigger>
       </div>
       <CollapsibleContent className='flex flex-col w-full p-3'>
-        <div className='flex flex-col'>
+        <div className='flex flex-col gap-2'>
           {section.todos.map((todo, ti) => (
-            <div key={`todo-${ti}`}>
-              <Checkbox checked={todo.done} onCheckedChange={e => actions.toggleSectionTodoDone(sectionIndex, ti, e as boolean)} />
-              {todo.title}
+            <div key={todo.id} className='flex flex-row items-center shadow gap-2 bg-paper p-2'>
+              <Checkbox
+                className='data-[state=checked]:border-purple-600 data-[state=checked]:bg-purple-600 border-purple-500 data-[state=checked]:text-white dark:data-[state=checked]:border-blue-700 dark:data-[state=checked]:bg-blue-700"'
+                checked={todo.done} onCheckedChange={(_e) => {
+                  actions.toggleSectionTodoDone(sectionIndex, ti)
+                }} />
+              <span className={cn({
+                "line-through text-muted-foreground": todo.done,
+              })}>
+                {todo.title}
+              </span>
+              <ButtonGroup className='ml-auto hover:cursor-pointer'>
+                <Button size={"sm"} className={cn("w-7 h-7 bg-red-500 hover:bg-red-950 hover:cursor-pointer")}
+                  onClick={() => actions.removeTodoFromSection(sectionIndex, ti)}
+                >
+                  <Trash />
+                </Button>
+              </ButtonGroup>
             </div>
           ))}
-
         </div>
-        <Button className='mx-auto' onClick={() => actions.addTodoToSection(sectionIndex, "Hello")}>
+        <Button className='mt-2 mx-auto' onClick={() => actions.addTodoToSection(sectionIndex, "Hello")}>
           <Plus />
         </Button>
       </CollapsibleContent>

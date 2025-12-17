@@ -18,8 +18,8 @@ export interface TodoActionsContextState {
   removeSection: (index: number) => void;
   addTodoToSection: (sectionIndex: number, todoText: string) => void;
   removeTodoFromSection: (sectionIndex: number, todoIndex: number) => void;
-  toggleSectionDone: (sectionIndex: number, isDone: boolean) => void;
-  toggleSectionTodoDone: (sectionIndex: number, todoIndex: number, isDone: boolean) => void;
+  toggleSectionDone: (sectionIndex: number) => void;
+  toggleSectionTodoDone: (sectionIndex: number, todoIndex: number) => void;
 }
 export const defaultTodoActionsContextState: TodoActionsContextState = {
   addSection: () => { },

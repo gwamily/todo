@@ -6,6 +6,7 @@ import { ButtonGroup } from "./ui/button-group";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Plus } from "lucide-react";
+import { getRandomPlaceholder } from "@/lib/utils";
 
 export const AddSectionForm: React.FC = () => {
 
@@ -24,6 +25,8 @@ export const AddSectionForm: React.FC = () => {
     }
   });
 
+  const placeholder = getRandomPlaceholder();
+
   return (
     <div className='w-full'>
       <form onSubmit={e => {
@@ -38,7 +41,7 @@ export const AddSectionForm: React.FC = () => {
               return (
                 <Field data-invalid={isInvalid}>
                   <ButtonGroup>
-                    <Input type='text' autoComplete='off' aria-invalid={isInvalid} placeholder='Find nemo...' name={field.name} value={field.state.value} onBlur={field.handleBlur} onChange={e => field.handleChange(e.target.value)} />
+                    <Input type='text' autoComplete='off' aria-invalid={isInvalid} placeholder={placeholder} name={field.name} value={field.state.value} onBlur={field.handleBlur} onChange={e => field.handleChange(e.target.value)} />
                     <Button variant={"outline"} aria-label='Add to todo list' type='submit'>
                       <Plus />
                     </Button>

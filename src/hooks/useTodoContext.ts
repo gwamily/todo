@@ -10,8 +10,6 @@ export const useTodoContext = () => {
     throw new Error("useTodoContext must be used within a TodoContextProvider and TodoActionsContextProvider");
   }
 
-  const getSections = () => context.sections;
-
   return { sections: context.sections };
 }
 

@@ -45,19 +45,23 @@ export const TodoContextProvider: React.FC<TodoContextProviderProps> = ({ childr
   }
 
   const addTodoToSection = (index: number, title: string) => {
-    const todo = makeNewTodo(title);
-    const section = state.sections[index];
-    if (!section) return;
-    const updatedSection = {
-      ...section,
-      todos: [...section.todos, todo]
-    };
-    const updatedSections = [...state.sections];
-    updatedSections[index] = updatedSection;
-    setState({
-      sections: updatedSections
-    });
-  }
+    const newTodo = makeNewTodo(title);
+
+    setState(prev => ({
+      ...prev,
+      sections: prev.sections.map((section, i) => {
+        if (i !== index) return section;
+
+        const updatedTodos = [...section.todos, newTodo];
+
+        return {
+          ...section,
+          todos: updatedTodos,
+          isDone: false
+        };
+      })
+    }));
+  };
 
   const removeTodoFromSection = (sectionIndex: number, todoIndex: number) => {
     const section = state.sections[sectionIndex];
@@ -74,12 +78,12 @@ export const TodoContextProvider: React.FC<TodoContextProviderProps> = ({ childr
     });
   }
 
-  const toggleSectionDone = (sectionIndex: number, isDone: boolean) => {
+  const toggleSectionDone = (sectionIndex: number) => {
     const section = state.sections[sectionIndex];
     if (!section) return;
     const updatedSection = {
       ...section,
-      isDone
+      isDone: !section.isDone
     };
     const updatedSections = [...state.sections];
     updatedSections[sectionIndex] = updatedSection;
@@ -88,16 +92,16 @@ export const TodoContextProvider: React.FC<TodoContextProviderProps> = ({ childr
     });
   }
 
-  const toggleSectionTodoDone = (sectionIndex: number, todoIndex: number, isDone: boolean) => {
+  const toggleSectionTodoDone = (sectionIndex: number, todoIndex: number) => {
+
     const section = state.sections[sectionIndex];
     if (!section) return;
 
     const updatedTodos = section.todos.map((todo, idx) =>
-      idx === todoIndex ? { ...todo, done: isDone, updatedAt: new Date() } : todo
+      idx === todoIndex ? { ...todo, done: !todo.done, updatedAt: new Date() } : todo
     );
 
     const allTodosFinished = updatedTodos.every(todo => todo.done);
-
     const updatedSection = {
       ...section,
       todos: updatedTodos,
@@ -106,6 +110,10 @@ export const TodoContextProvider: React.FC<TodoContextProviderProps> = ({ childr
 
     const updatedSections = [...state.sections];
     updatedSections[sectionIndex] = updatedSection;
+
+    setState({
+      sections: updatedSections
+    });
 
   }
   useEffect(() => {
