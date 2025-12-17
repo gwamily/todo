@@ -7,10 +7,15 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Plus } from "lucide-react";
 import { getRandomPlaceholder } from "@/lib/utils";
+import { useCallback } from "react";
 
 export const AddSectionForm: React.FC = () => {
 
   const actions = useTodoActions();
+
+  let placeholder = useCallback(() => {
+    return getRandomPlaceholder();
+  }, [])
 
   const form = useForm({
     defaultValues: {
@@ -25,13 +30,13 @@ export const AddSectionForm: React.FC = () => {
     }
   });
 
-  const placeholder = getRandomPlaceholder();
 
   return (
     <div className='w-full'>
       <form onSubmit={e => {
         e.preventDefault();
         form.handleSubmit(e);
+        placeholder();
       }}>
         <FieldGroup>
           <form.Field name='title'
@@ -41,7 +46,7 @@ export const AddSectionForm: React.FC = () => {
               return (
                 <Field data-invalid={isInvalid}>
                   <ButtonGroup>
-                    <Input type='text' autoComplete='off' aria-invalid={isInvalid} placeholder={placeholder} name={field.name} value={field.state.value} onBlur={field.handleBlur} onChange={e => field.handleChange(e.target.value)} />
+                    <Input type='text' autoComplete='off' aria-invalid={isInvalid} placeholder={placeholder()} name={field.name} value={field.state.value} onBlur={field.handleBlur} onChange={e => field.handleChange(e.target.value)} />
                     <Button variant={"outline"} aria-label='Add to todo list' type='submit'>
                       <Plus />
                     </Button>

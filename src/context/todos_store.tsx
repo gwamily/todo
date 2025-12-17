@@ -20,6 +20,8 @@ export interface TodoActionsContextState {
   removeTodoFromSection: (sectionIndex: number, todoIndex: number) => void;
   toggleSectionDone: (sectionIndex: number) => void;
   toggleSectionTodoDone: (sectionIndex: number, todoIndex: number) => void;
+  changeSectionTitle: (sectionIndex: number, title: string) => void;
+  changeSectionTodoTitle: (sectionIndex: number, todoIndex: number, title: string) => void
 }
 export const defaultTodoActionsContextState: TodoActionsContextState = {
   addSection: () => { },
@@ -28,5 +30,7 @@ export const defaultTodoActionsContextState: TodoActionsContextState = {
   removeTodoFromSection: () => { },
   toggleSectionDone: () => { },
   toggleSectionTodoDone: () => { },
+  changeSectionTitle: () => { },
+  changeSectionTodoTitle: () => { }
 };
 export const TodoActionsContext = createContext<TodoActionsContextState>(defaultTodoActionsContextState);

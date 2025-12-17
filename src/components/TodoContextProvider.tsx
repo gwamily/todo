@@ -114,8 +114,41 @@ export const TodoContextProvider: React.FC<TodoContextProviderProps> = ({ childr
     setState({
       sections: updatedSections
     });
-
   }
+
+  const changeSectionTitle = (sectionIndex: number, title: string) => {
+    setState(prev => ({
+      ...prev,
+      sections: prev.sections.map((section, i) =>
+        i === sectionIndex
+          ? { ...section, title, updatedAt: new Date() }
+          : section
+      )
+    }));
+  };
+  const changeSectionTodoTitle = (sectionIndex: number, todoIndex: number, title: string) => {
+    setState(prev => ({
+      ...prev,
+      sections: prev.sections.map((section, i) => {
+        // If it's not the right section, skip
+        if (i !== sectionIndex) return section;
+
+        // Map through the todos of the target section
+        const updatedTodos = section.todos.map((todo, j) =>
+          j === todoIndex
+            ? { ...todo, title, updatedAt: new Date() }
+            : todo
+        );
+
+        return {
+          ...section,
+          todos: updatedTodos,
+          updatedAt: new Date() // Update section timestamp too since its content changed
+        };
+      })
+    }));
+  };
+
   useEffect(() => {
     save();
   }, [state.sections])
@@ -126,7 +159,12 @@ export const TodoContextProvider: React.FC<TodoContextProviderProps> = ({ childr
   }, [])
 
   return (
-    <TodoActionsContext.Provider value={{ addSection, addTodoToSection, removeSection, removeTodoFromSection, toggleSectionDone, toggleSectionTodoDone }}>
+    <TodoActionsContext.Provider value={{
+      addSection, addTodoToSection,
+      removeSection, removeTodoFromSection,
+      toggleSectionDone, toggleSectionTodoDone,
+      changeSectionTitle, changeSectionTodoTitle
+    }}>
       <TodoContext.Provider value={state}>
         {children}
       </TodoContext.Provider>
