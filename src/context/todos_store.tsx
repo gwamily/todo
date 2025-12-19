@@ -1,16 +1,19 @@
-import type { TodoSection } from "@/types/section";
 import { createContext } from "react";
+import type { Project } from '@/types/project'
 
 export interface TodoContextState {
-  sections: TodoSection[]
+  projects: Project[],
+  currentProject: number | null;
 }
 
 export const defaultTodoContextState: TodoContextState = {
-  sections: []
+  projects: [],
+  currentProject: null
 };
 
 export const TodoContext = createContext<TodoContextState>({
-  sections: []
+  projects: [],
+  currentProject: null
 });
 
 export interface TodoActionsContextState {
@@ -23,6 +26,7 @@ export interface TodoActionsContextState {
   changeSectionTitle: (sectionIndex: number, title: string) => void;
   changeSectionTodoTitle: (sectionIndex: number, todoIndex: number, title: string) => void
 }
+
 export const defaultTodoActionsContextState: TodoActionsContextState = {
   addSection: () => { },
   removeSection: () => { },

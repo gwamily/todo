@@ -6,7 +6,7 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig(() => {
   return {
-    base: '/subtodo/',
+    base: '/todo/',
     plugins: [
       react({
         babel: {

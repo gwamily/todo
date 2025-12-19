@@ -1,11 +1,11 @@
 import type { Todo } from "@/types/todo"
 import { GWAMCheck, GWAMIconButton } from "./GWAMStyled"
-import { useTodoActions } from "@/hooks/useTodoContext"
 import { ButtonGroup } from "./ui/button-group"
 import { cn } from "@/lib/utils"
 import { Trash } from "lucide-react"
 import { useState } from "react"
 import { Input } from "./ui/input"
+import { useProjectActions } from "@/hooks/useProject"
 
 interface Props {
   todo: Todo
@@ -15,12 +15,14 @@ interface Props {
 
 export const TodoItem: React.FC<Props> = ({ todo, sectionIndex, todoIndex }) => {
 
-  const actions = useTodoActions();
+  const actions = useProjectActions();
+  const [editTitle, setEditTitle] = useState<string>(todo.title);
+
   const [isEditing, setIsEditing] = useState(false);
 
-  const editTodoTitle = (newTitle: string) => {
-    if (newTitle.trim() === "") return;
-    actions.changeSectionTodoTitle(sectionIndex, todoIndex, newTitle);
+  const saveOnBlur = (title: string) => {
+    actions.changeSectionTodoTitle(sectionIndex, todoIndex, title);
+    setIsEditing(false);
   }
 
   return (
@@ -32,10 +34,14 @@ export const TodoItem: React.FC<Props> = ({ todo, sectionIndex, todoIndex }) => 
       <span className={cn({
       })}>
         {isEditing ? (
-          <Input value={todo.title} onChange={(e) => {
-            editTodoTitle(e.target.value);
+          <Input value={editTitle} onChange={(e) => {
+            setEditTitle(e.target.value);
           }} onBlur={() => {
-            setIsEditing(false);
+            if (editTitle.trim() === "") {
+              actions.removeTodoFromSection(sectionIndex, todoIndex);
+              return
+            }
+            saveOnBlur(editTitle);
           }} />
         ) : (
           <span onClick={() => {

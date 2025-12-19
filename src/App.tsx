@@ -1,14 +1,22 @@
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from './components/ui/card';
-import { ButtonGroup } from './components/ui/button-group';
-import { Button } from './components/ui/button';
 import { ScrollArea } from './components/ui/scroll-area';
 import { SectionTodo } from './components/TodoSection';
-import { useTodoContext } from './hooks/useTodoContext';
 import { AddSectionForm } from './components/AddSectionForm';
+// import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger } from './components/ui/dropdown-menu';
+// import { GWAMIconButton } from './components/GWAMStyled';
+// import { Cog, Trash } from 'lucide-react';
+import { EmptyTodos } from './components/EmptyTodos';
+import { TodoProjectSelector } from './components/TodoProjectSelector';
+import { useProject } from './hooks/useProject';
+import { useMemo } from 'react';
 
 function App() {
 
-  const { sections } = useTodoContext();
+  const state = useProject();
+
+  const currentProject = useMemo(() => {
+    return state.projects.find(p => p.id === state.currentProject)
+  }, [state.currentProject, state.projects])
 
   return (
     <div className='relative flex flex-col gap-5 my-20 w-full h-full font-gwam tracking-normal'>
@@ -16,27 +24,55 @@ function App() {
       <div className='mx-2 md:mx-0'>
         <Card className='bg-white max-w-200 mx-auto gap-2'>
           <CardHeader>
-            <CardTitle>Subnautica TODOs</CardTitle>
+            <CardTitle className='flex flex-row justify-between w-full items-center'>
+              <div className='flex gap-2 items-center'>
+                <span>
+                  GWAM TODOs
+                </span>
+                <TodoProjectSelector />
+              </div>
+              {/* <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <GWAMIconButton className='bg-linear-to-b from-purple-400 to-pink-400'>
+                    <Cog />
+                  </GWAMIconButton>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem className='hover:cursor-pointer text-xs'>
+                      <Trash color="red" /> Remove all projects
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+                </DropdownMenuContent>
+              </DropdownMenu> */}
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className='w-full flex flex-col gap-2'>
-              <AddSectionForm />
+              {state.currentProject && <AddSectionForm />}
               <ScrollArea className='w-full h-100 '>
-                <div className='flex flex-col gap-2'>
-                  {sections.map((section, si) =>
-                    (<SectionTodo key={`section-${si}`} section={section} sectionIndex={si} />)
-                  )}
-                </div>
+                {currentProject == null ? (
+                  <div>
+                    Select project
+                  </div>
+                ) : (
+                  currentProject?.sections.length <= 0 ? (
+                    <EmptyTodos />
+                  ) : (
+                    <div className='flex flex-col gap-2'>
+                      {currentProject?.sections.map((section, si) =>
+                        (<SectionTodo key={`section-${si}`} section={section} sectionIndex={si} />)
+                      )}
+                    </div>
+                  )
+                )}
               </ScrollArea>
             </div>
           </CardContent>
           <CardFooter>
-            <ButtonGroup>
-              <Button onClick={() => {
-              }}>Clear all TODOs</Button>
-              <Button>Uncheck all</Button>
-              <Button>Check all</Button>
-            </ButtonGroup>
+            <span className='text-sm mt-5'>
+              Made with ✌ and ❤️ by Pawix
+            </span>
           </CardFooter>
         </Card>
       </div>

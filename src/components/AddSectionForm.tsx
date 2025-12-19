@@ -1,17 +1,17 @@
-import { useTodoActions } from "@/hooks/useTodoContext";
 import { TodoFormSchema } from "@/types/todo";
 import { useForm } from "@tanstack/react-form";
 import { Field, FieldError, FieldGroup } from "./ui/field";
 import { ButtonGroup } from "./ui/button-group";
 import { Input } from "./ui/input";
-import { Button } from "./ui/button";
 import { Plus } from "lucide-react";
 import { getRandomPlaceholder } from "@/lib/utils";
 import { useCallback } from "react";
+import { useProjectActions } from "@/hooks/useProject";
+import { GWAMButton } from "./GWAMStyled";
 
 export const AddSectionForm: React.FC = () => {
 
-  const actions = useTodoActions();
+  const actions = useProjectActions();
 
   let placeholder = useCallback(() => {
     return getRandomPlaceholder();
@@ -47,9 +47,9 @@ export const AddSectionForm: React.FC = () => {
                 <Field data-invalid={isInvalid}>
                   <ButtonGroup>
                     <Input type='text' autoComplete='off' aria-invalid={isInvalid} placeholder={placeholder()} name={field.name} value={field.state.value} onBlur={field.handleBlur} onChange={e => field.handleChange(e.target.value)} />
-                    <Button variant={"outline"} aria-label='Add to todo list' type='submit'>
-                      <Plus />
-                    </Button>
+                    <GWAMButton variant={"outline"} aria-label='Add to todo list' type='submit'>
+                      <Plus color="white" />
+                    </GWAMButton>
                   </ButtonGroup>
                   {isInvalid && (
                     <FieldError className='text-xs' errors={field.state.meta.errors} />

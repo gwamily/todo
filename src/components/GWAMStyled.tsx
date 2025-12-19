@@ -11,12 +11,12 @@ type ButtonProps = {
 }
 
 export const GWAMButton: React.FC<ButtonProps> = ({ children, className, ...props }) => {
-  return (<Button className={cn("hover:cursor-pointer", className)} {...props}>
+  return (<Button className={cn("hover:from-purple-500 hover:to-pink-500 bg-linear-to-br from-purple-400 to-pink-500", "hover:cursor-pointer", className)} {...props}>
     {children}
   </Button>)
 }
-export const GWAMIconButton: React.FC<ButtonProps> = ({ children, className, ...props }) => {
-  return <GWAMButton size={"sm"} className={cn("w-5 h-5", className)} {...props}>
+export const GWAMIconButton: React.FC<ButtonProps> = ({ children, className, size, ...props }) => {
+  return <GWAMButton size={size} className={cn("w-5 h-5 hover:from-purple-500 hover:to-pink-500 bg-linear-to-br from-purple-400 to-pink-500", className)} {...props}>
     {children}
   </GWAMButton>
 }
